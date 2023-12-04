@@ -22,6 +22,16 @@ const createNewPerson = (newPerson) => {
   });
 };
 
+const updateAPerson = (id, newPerson) => {
+  console.log(`PUT request to Server for ID-${id}...`);
+  const request = axios.put(`${baseUrl}/${id}`, newPerson);
+
+  return request.then((response) => {
+    console.log("PUT response: ", response.data);
+    return response.data;
+  });
+};
+
 const deleteAPerson = (id) => {
   console.log(`DELETE request to Server for ID-${id}...`);
   const request = axios.delete(`${baseUrl}/${id}`);
@@ -29,4 +39,4 @@ const deleteAPerson = (id) => {
   return request.then(() => console.log(`Deleted Person at ID ${id}`));
 };
 
-export default { getAllPersons, createNewPerson, deleteAPerson };
+export default { getAllPersons, createNewPerson, updateAPerson, deleteAPerson };

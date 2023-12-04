@@ -10,6 +10,15 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [search, setSearch] = useState("");
 
+  // Using this to fix issue when (nth - 1) person is deleted
+  // Afterwards if a new person is added, it will have same ID as the nth person
+  let nextId =
+    persons.length > 0 &&
+    persons.reduce(
+      (prev, curr) => (prev.id > curr.id ? prev : curr),
+      persons[persons.length - 1]
+    ).id + 1;
+
   useEffect(() => {
     console.log("Effect is now running");
 
@@ -35,12 +44,45 @@ const App = () => {
     e.preventDefault();
 
     if (persons.some((person) => person.name === newName)) {
-      alert(`${newName} is already added in the phonebook`);
+      let matchedPerson = persons.find((person) => person.name === newName);
+
+      if (matchedPerson.number === newNumber) {
+        console.log("Same name and number already in the phonebook");
+
+        alert(`${newName} is already added in the phonebook`);
+        return;
+      }
+
+      console.log("Same name but different number in the phonebook");
+      if (
+        window.confirm(
+          `${newName} is already added in the phonebook. Do you want to replace the old number with the new one?`
+        )
+      ) {
+        let updatedPerson = {
+          name: newName,
+          number: newNumber,
+          id: matchedPerson.id,
+        };
+
+        personService
+          .updateAPerson(matchedPerson.id, updatedPerson)
+          .then((updatedPerson) =>
+            setPersons(
+              persons.map((person) =>
+                person.id === updatedPerson.id ? updatedPerson : person
+              )
+            )
+          );
+          console.log("Person successfully updated");
+      } else {
+        console.log("Update cancelled");
+      }
     } else {
       let newPerson = {
         name: newName,
         number: newNumber,
-        id: persons.length + 1,
+        id: nextId,
       };
       let clearInputFields = () => {
         setNewName("");
@@ -56,48 +98,12 @@ const App = () => {
   };
 
   const deletePerson = (id) => {
-    if (window.confirm("Are you sure you want to delete this person?")) {
-      let newPerson = [...persons];
+    let deletedPerson = persons.find((person) => person.id === id);
 
+    if (window.confirm(`Delete ${deletedPerson.name} ?`)) {
       personService
         .deleteAPerson(id)
-        // .then(() => {
-        //   // Since the phonebook works with incremental ID
-        //   // If the nth-1 person is deleted, an error will be returned if new person is added.
-        //   // Fix for it - fix the gap in IDs of person by following code:
-        //   // Not sure if this is the best way to do this
-        //   let personsLen = persons.length;
-
-        //   if (id < personsLen + 1) {
-        //     console.log("Fixing the gap in IDs of person");
-
-        //     for (let i = id; i < personsLen; i++) {
-        //       let nextPerson = persons[i];
-        //       console.log("Next Person: ", nextPerson);
-
-        //       let fixedPerson = {
-        //         name: nextPerson.name,
-        //         number: nextPerson.number,
-        //         id: i,
-        //       };
-
-        //       personService
-        //         .deleteAPerson(nextPerson.id)
-        //         .then(() => personService.createNewPerson(fixedPerson))
-        //         .then(() => {
-        //           newPerson = newPerson.map((person) => {
-        //             if (person.id === nextPerson.id) {
-        //               return fixedPerson;
-        //             } else {
-        //               return person;
-        //             }
-        //           });
-        //         })
-        //         .catch((error) => console.log("Error updating IDs"));
-        //     }
-        //   }
-        // })
-        // .then(() => setPersons(newPerson));
+        .then(() => setPersons(persons.filter((person) => person.id !== id)));
     }
   };
 
