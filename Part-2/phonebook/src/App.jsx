@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+import "./index.css";
 import Filter from "./components/Filter";
+import Notification from "./components/Notification";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import personService from "./services/axiosPerson";
@@ -12,18 +14,8 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [search, setSearch] = useState("");
-
-  /*
-      Variables
-  */
-  // Using this to fix issue when (nth - 1) person is deleted
-  // Afterwards if a new person is added, it will have same ID as the nth person
-  let nextId =
-    persons.length > 0 &&
-    persons.reduce(
-      (prev, curr) => (prev.id > curr.id ? prev : curr),
-      persons[persons.length - 1]
-    ).id + 1;
+  const [error, setError] = useState(false);
+  const [message, setMessage] = useState(null);
 
   /*
       Effects
@@ -38,15 +30,32 @@ const App = () => {
   }, []);
 
   /*
-      Functions
+      Variables
   */
-  // This snippet was taken from React Official Documentation
-  // https://react.dev/learn/sharing-state-between-components#challenges
+  // Using this to fix issue when (nth - 1) person is deleted
+  // Afterwards if a new person is added, it will have same ID as the nth person
+  let nextId =
+    persons.length > 0 &&
+    persons.reduce(
+      (prev, curr) => (prev.id > curr.id ? prev : curr),
+      persons[persons.length - 1]
+    ).id + 1;
   let numbers = persons.filter((person) =>
     person.name
       .split(" ")
       .some((name) => name.toLowerCase().startsWith(search.toLowerCase()))
   );
+
+  /*
+      Functions
+  */
+  // This snippet was taken from React Official Documentation
+  // https://react.dev/learn/sharing-state-between-components#challenges
+  let clearInputFields = () => {
+    setNewName("");
+    setNewNumber("");
+    setSearch("");
+  };
 
   /*
     Input Event Handler Functions
@@ -64,7 +73,27 @@ const App = () => {
     if (window.confirm(`Delete ${deletedPerson.name} ?`)) {
       personService
         .deleteAPerson(id)
-        .then(() => setPersons(persons.filter((person) => person.id !== id)));
+        .then(() => {
+          setMessage(`Deleted ${deletedPerson.name}`);
+          setInterval(() => setMessage(null), 5000);
+
+          setPersons(persons.filter((person) => person.id !== id));
+        })
+        .catch((error) => {
+          console.log(
+            `Error occurred while deleting ${deletedPerson.name}`,
+            error.message
+          );
+
+          setError(true);
+          setMessage(
+            `Information of ${deletedPerson.name} has already been removed from the server`
+          );
+          setInterval(() => {
+            setError(false);
+            setMessage(null);
+          }, 5000);
+        });
     }
   };
 
@@ -94,13 +123,32 @@ const App = () => {
 
         personService
           .updateAPerson(matchedPerson.id, matchedPerson)
-          .then((updatedPerson) =>
+          .then((updatedPerson) => {
+            clearInputFields();
+            setMessage(`Changed number for ${matchedPerson.name}`);
+            setInterval(() => setMessage(null), 5000);
+
             setPersons(
               persons.map((person) =>
                 person.id === updatedPerson.id ? updatedPerson : person
               )
-            )
-          );
+            );
+          })
+          .catch((error) => {
+            console.log(
+              `Error occurred while changing ${matchedPerson.name}'s number`,
+              error.message
+            );
+
+            setError(true);
+            setMessage(
+              `Information of ${newName} has already been removed from the server`
+            );
+            setInterval(() => {
+              setError(false);
+              setMessage(null);
+            }, 5000);
+          });
 
         console.log("Person successfully updated");
       } else {
@@ -115,22 +163,37 @@ const App = () => {
         number: newNumber,
         id: nextId,
       };
-      let clearInputFields = () => {
-        setNewName("");
-        setNewNumber("");
-        setSearch("");
-      };
 
-      personService.createNewPerson(newPerson).then((newPersonAdded) => {
-        setPersons(persons.concat(newPersonAdded));
-        clearInputFields();
-      });
+      personService
+        .createNewPerson(newPerson)
+        .then((newPersonAdded) => {
+          setMessage(`Added ${newPersonAdded.name}`);
+          setInterval(() => setMessage(null), 5000);
+
+          setPersons(persons.concat(newPersonAdded));
+          clearInputFields();
+        })
+        .catch((error) => {
+          console.log(
+            `Error occurred while adding ${newPerson.name}`,
+            error.message
+          );
+
+          setError(true);
+          setMessage(`Information of ${newName} already exists in the server`);
+          setInterval(() => {
+            setError(false);
+            setMessage(null);
+          }, 5000);
+        });
     }
   };
 
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification message={message} error={error} />
 
       <Filter value={search} onChange={handleSearch} />
 
