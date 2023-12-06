@@ -16,7 +16,6 @@ const App = () => {
   /*
       Variables
   */
-
   // Using this to fix issue when (nth - 1) person is deleted
   // Afterwards if a new person is added, it will have same ID as the nth person
   let nextId =
@@ -41,7 +40,6 @@ const App = () => {
   /*
       Functions
   */
-
   // This snippet was taken from React Official Documentation
   // https://react.dev/learn/sharing-state-between-components#challenges
   let numbers = persons.filter((person) =>
@@ -109,7 +107,7 @@ const App = () => {
         console.log("Update cancelled");
       }
     } else {
-    /*
+      /*
       When name is different from an existing person
     */
       let newPerson = {
