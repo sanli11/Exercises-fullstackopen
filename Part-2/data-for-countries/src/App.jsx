@@ -14,31 +14,36 @@ const App = () => {
     countryService.getAll().then((list) => setCountries(list));
   }, [countryService]);
 
-  let displayedResults = null;
-
-  if (query) {
-    if (result.length === 0) {
-      displayedResults = <p>No matches</p>;
-    } else if (result.length === 1) {
-      displayedResults = <CountryDetails countryData={result[0]} />;
-    } else if (result.length > 10) {
-      displayedResults = <p>Too many matches. Specify another filter</p>;
-    } else {
-      displayedResults = (
-        <>
+  const displayResults = (matchedCountries) => {
+    if (query) {
+      if (matchedCountries.length === 0) {
+        setDetails(prevState => prevState ? null : prevState);
+        return <p>No matches</p>;
+      } else if (matchedCountries.length === 1) {
+        setDetails(matchedCountries[0]);
+        return null;
+      } else if (matchedCountries.length > 10) {
+        setDetails(null);
+        return <p>Too many matches. Specify another filter</p>;
+      } else {
+        if (!matchedCountries.includes(details)) {
+          setDetails(null);
+        }
+        return (
           <ul>
-            {result.map((country) => (
+            {matchedCountries.map((country) => (
               <li key={country.cca2}>
                 {country.name.common}
                 <button onClick={() => handleClick(country)}>Show</button>
               </li>
             ))}
           </ul>
-          <CountryDetails countryData={details} />
-        </>
-      );
+        );
+      }
+    } else {
+      return null;
     }
-  }
+  };
 
   const handleClick = (country) => {
     console.log("Showing Details for: ", country);
@@ -68,8 +73,7 @@ const App = () => {
     });
 
     console.log("List of countries returned: ", searchedResult);
-    setResult(searchedResult);
-    setDetails(null);
+    setResult(displayResults(searchedResult));
   };
 
   return (
@@ -80,7 +84,8 @@ const App = () => {
         value={query}
         onChange={handleQuery}
       />
-      <div>{displayedResults}</div>
+      {result}
+      <div>{CountryDetails && <CountryDetails countryData={details} />}</div>
     </div>
   );
 };
