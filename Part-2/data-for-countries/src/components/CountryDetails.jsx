@@ -1,7 +1,16 @@
+import { useEffect } from "react";
+import weatherService from "../services/weather";
+
 const CountryDetails = ({ countryData }) => {
   if (!countryData) {
     return;
   }
+
+  let weatherData = null;
+
+  useEffect(() => {
+    weatherData = weatherService.getData(countryData.capital);
+  }, [weatherService]);
 
   let languages = Object.values(countryData.languages);
 
@@ -33,6 +42,20 @@ const CountryDetails = ({ countryData }) => {
         </div>
         <img src={countryData.flags.png} alt={countryData.name.alt} />
       </div>
+      <h4>Weather in {countryData.capital}</h4>
+      {weatherData ? (
+        <div>
+          <p>
+            <b>Temperature:</b> {weatherData.current.temp}
+          </p>
+          <p>
+            <b>Wind Speed:</b> {weatherData.current.wind_speed}
+          </p>
+          
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 };
