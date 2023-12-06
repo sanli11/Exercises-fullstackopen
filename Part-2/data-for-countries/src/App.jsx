@@ -17,7 +17,7 @@ const App = () => {
   const displayResults = (matchedCountries) => {
     if (query) {
       if (matchedCountries.length === 0) {
-        setDetails(prevState => prevState ? null : prevState);
+        setDetails(null);
         return <p>No matches</p>;
       } else if (matchedCountries.length === 1) {
         setDetails(matchedCountries[0]);
