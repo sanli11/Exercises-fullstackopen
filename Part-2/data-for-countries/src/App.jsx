@@ -5,13 +5,17 @@ import CountryDetails from "./components/CountryDetails";
 console.log("Initial Render");
 
 const App = () => {
+  const [loading, setLoading] = useState(true);
   const [countries, setCountries] = useState([]);
   const [query, setQuery] = useState("");
   const [result, setResult] = useState([]);
   const [details, setDetails] = useState(null);
 
   useEffect(() => {
-    countryService.getAll().then((list) => setCountries(list));
+    countryService.getAll().then((list) => {
+      setLoading(false);
+      setCountries(list);
+    });
   }, [countryService]);
 
   const displayResults = (matchedCountries) => {
@@ -81,6 +85,7 @@ const App = () => {
       <input
         type="search"
         placeholder="Search Country"
+        disabled={loading}
         value={query}
         onChange={handleQuery}
       />
