@@ -10,6 +10,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(express.static("dist"));
 
 app.use(morgan("tiny", { skip: (req, res) => req.method === "POST" }));
 app.use(
