@@ -1,0 +1,42 @@
+import axios from "axios";
+
+const baseUrl = "http://localhost:3001/api/persons";
+
+const getAllPersons = () => {
+  console.log("Getting Data from Server...");
+  const request = axios.get(baseUrl);
+
+  return request.then((response) => {
+    console.log("Data Received: ", response.data);
+    return response.data;
+  });
+};
+
+const createNewPerson = (newPerson) => {
+  console.log("POST request to Server...");
+  const request = axios.post(baseUrl, newPerson);
+
+  return request.then((response) => {
+    console.log("POST response: ", response.data);
+    return response.data;
+  });
+};
+
+const updateAPerson = (id, newPerson) => {
+  console.log(`PUT request to Server for ID-${id}...`);
+  const request = axios.put(`${baseUrl}/${id}`, newPerson);
+
+  return request.then((response) => {
+    console.log("PUT response: ", response.data);
+    return response.data;
+  });
+};
+
+const deleteAPerson = (id) => {
+  console.log(`DELETE request to Server for ID-${id}...`);
+  const request = axios.delete(`${baseUrl}/${id}`);
+
+  return request.then(() => console.log(`Deleted Person at ID ${id}`));
+};
+
+export default { getAllPersons, createNewPerson, updateAPerson, deleteAPerson };
