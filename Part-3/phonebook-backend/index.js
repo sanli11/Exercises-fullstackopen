@@ -1,13 +1,27 @@
+/*
+  The backend is deployed on Cyclic
+  Therefore the scripts in package.json
+  are different than that of the course.
+  Link to the web application:
+  https://odd-tweed-jacket-jay.cyclic.app
+*/
+
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 
 morgan.token("data", function (req, res) {
   return JSON.stringify(req.body);
 });
 
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({ error: "unknown endpoint" });
+};
+
 const app = express();
 
 app.use(express.static("dist"));
+app.use(cors());
 app.use(express.json());
 
 app.use(morgan("tiny", { skip: (req, res) => req.method === "POST" }));
@@ -61,7 +75,7 @@ app.get("/info", (req, res) => {
 app.get("/api/persons", (req, res) => {
   console.log("Showing all persons");
 
-  res.json(persons);
+  res.send(persons);
 });
 
 app.get("/api/persons/:id", (req, res) => {
@@ -113,6 +127,8 @@ app.post("/api/persons", (req, res) => {
 
   res.json(newPerson);
 });
+
+app.use(unknownEndpoint);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
