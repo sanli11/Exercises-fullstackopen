@@ -109,6 +109,28 @@ app.delete("/api/persons/:id", (req, res) => {
   res.status(204).end();
 });
 
+// app.post("/api/persons", (req, res) => {
+//   const personInfo = req.body;
+//   if (!personInfo.name) {
+//     console.log("Name for person is required");
+//     return res.status(400).json({ error: "Name for person is required" });
+//   } else if (!personInfo.number) {
+//     console.log("Number for person is required");
+//     return res.status(400).json({ error: "Number for person is required" });
+//   } else if (persons.find((p) => p.name === personInfo.name)) {
+//     console.log(
+//       "A person with the name already exists in the phonebook. Each name must be unique"
+//     );
+//     return res.status(400).json({ error: "name must be unique" });
+//   }
+//   const newPerson = {
+//     id: generateId(),
+//     name: personInfo.name,
+//     number: personInfo.number,
+//   };
+//   persons = persons.concat(newPerson);
+//   res.json(newPerson);
+// });
 app.post("/api/persons", (req, res) => {
   const personInfo = req.body;
 
@@ -118,22 +140,14 @@ app.post("/api/persons", (req, res) => {
   } else if (!personInfo.number) {
     console.log("Number for person is required");
     return res.status(400).json({ error: "Number for person is required" });
-  } else if (persons.find((p) => p.name === personInfo.name)) {
-    console.log(
-      "A person with the name already exists in the phonebook. Each name must be unique"
-    );
-    return res.status(400).json({ error: "name must be unique" });
   }
 
-  const newPerson = {
-    id: generateId(),
+  const person = new Person({
     name: personInfo.name,
     number: personInfo.number,
-  };
+  });
 
-  persons = persons.concat(newPerson);
-
-  res.json(newPerson);
+  person.save().then((savedPerson) => res.json(savedPerson));
 });
 
 app.use(unknownEndpoint);
