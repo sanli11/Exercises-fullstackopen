@@ -159,6 +159,20 @@ app.delete("/api/persons/:id", (req, res, next) => {
     .catch((error) => next(error));
 });
 
+app.put("/api/persons/:id", (req, res, next) => {
+  const id = req.params.id;
+  const personInfo = req.body;
+
+  const person = {
+    name: personInfo.name,
+    number: personInfo.number,
+  };
+
+  Person.findByIdAndUpdate(id, person, { new: true })
+    .then((updatedPerson) => res.json(updatedPerson))
+    .catch((error) => next(error));
+});
+
 const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: "unknown endpoint" });
 };
