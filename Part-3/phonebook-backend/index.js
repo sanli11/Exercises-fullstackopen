@@ -1,3 +1,6 @@
+/*
+    The Commented sections were in use before implementing MongoDB/Mongoose
+*/
 require("dotenv").config();
 
 const express = require("express");
@@ -51,11 +54,11 @@ app.use(
 //   },
 // ];
 
-const generateId = () => {
-  let maxId = persons.length > 0 ? Math.max(...persons.map((p) => p.id)) : 0;
+// const generateId = () => {
+//   let maxId = persons.length > 0 ? Math.max(...persons.map((p) => p.id)) : 0;
 
-  return maxId + 1;
-};
+//   return maxId + 1;
+// };
 
 // app.get("/info", (req, res) => {
 //   console.log("Showing information about the phonebook");
@@ -99,16 +102,6 @@ app.get("/api/persons/:id", (req, res) => {
   Person.findById(req.params.id).then((p) => res.json(p));
 });
 
-app.delete("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  console.log("Deleting person with ID: ", id);
-
-  persons = persons.filter((p) => p.id !== id);
-  console.log("Person deleted with ID: ", id);
-
-  res.status(204).end();
-});
-
 // app.post("/api/persons", (req, res) => {
 //   const personInfo = req.body;
 //   if (!personInfo.name) {
@@ -148,6 +141,22 @@ app.post("/api/persons", (req, res) => {
   });
 
   person.save().then((savedPerson) => res.json(savedPerson));
+});
+
+// app.delete("/api/persons/:id", (req, res) => {
+//   const id = Number(req.params.id);
+//   console.log("Deleting person with ID: ", id);
+//   persons = persons.filter((p) => p.id !== id);
+//   console.log("Person deleted with ID: ", id);
+//   res.status(204).end();
+// });
+app.delete("/api/persons/:id", (req, res) => {
+  Person.findByIdAndDelete(req.params.id).then((_) =>
+    res.status(204).end()
+  ).catch(error => {
+    console.log("Error occurred", error.message);
+    return res.status(400).send({ error: 'Mal-formatted ID' });
+  });
 });
 
 app.use(unknownEndpoint);
