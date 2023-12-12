@@ -124,8 +124,10 @@ app.get("/api/persons", (req, res) => {
   Person.find({}).then((p) => res.json(p));
 });
 
-app.get("/api/persons/:id", (req, res) => {
-  Person.findById(req.params.id).then((p) => res.json(p));
+app.get("/api/persons/:id", (req, res, next) => {
+  Person.findById(req.params.id)
+    .then((p) => res.json(p))
+    .catch((error) => next(error));
 });
 
 app.post("/api/persons", (req, res) => {
@@ -150,10 +152,11 @@ app.post("/api/persons", (req, res) => {
 app.delete("/api/persons/:id", (req, res, next) => {
   Person.findByIdAndDelete(req.params.id)
     .then((_) => res.status(204).end())
-    .catch((error) => {
-      console.log("Error occurred", error.message);
-      return res.status(400).send({ error: "Mal-formatted ID" });
-    });
+    // .catch((error) => {
+    //   console.log("Error occurred", error.message);
+    //   return res.status(400).send({ error: "Mal-formatted ID" });
+    // });
+    .catch((error) => next(error));
 });
 
 const unknownEndpoint = (req, res) => {
@@ -161,6 +164,18 @@ const unknownEndpoint = (req, res) => {
 };
 
 app.use(unknownEndpoint);
+
+const errorHandler = (err, req, res, next) => {
+  console.log(err.message);
+
+  if (err.name === "CastError") {
+    return res.status(400).send({ error: "Mal-formatted ID" });
+  }
+
+  next(err);
+};
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
