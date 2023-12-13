@@ -7,7 +7,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 
-morgan.token("data", function (req, res) {
+morgan.token("data", function (req) {
   return JSON.stringify(req.body);
 });
 
@@ -19,11 +19,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("dist"));
 
-app.use(morgan("tiny", { skip: (req, res) => req.method === "POST" }));
+app.use(morgan("tiny", { skip: (req) => req.method === "POST" }));
 app.use(
   morgan(
     ":method :url :status :res[content-length] - :response-time ms {:data}",
-    { skip: (req, res) => req.method !== "POST" }
+    { skip: (req) => req.method !== "POST" }
   )
 );
 
@@ -156,7 +156,7 @@ app.post("/api/persons", (req, res, next) => {
 
 app.delete("/api/persons/:id", (req, res, next) => {
   Person.findByIdAndDelete(req.params.id)
-    .then((_) => res.status(204).end())
+    .then(() => res.status(204).end())
     // .catch((error) => {
     //   console.log("Error occurred", error.message);
     //   return res.status(400).send({ error: "Mal-formatted ID" });
