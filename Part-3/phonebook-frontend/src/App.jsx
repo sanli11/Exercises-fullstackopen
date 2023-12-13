@@ -92,7 +92,7 @@ const App = () => {
           setInterval(() => {
             setError(false);
             setMessage(null);
-          }, 5000);
+          }, 8500);
         });
     }
   };
@@ -147,7 +147,7 @@ const App = () => {
             setInterval(() => {
               setError(false);
               setMessage(null);
-            }, 5000);
+            }, 8500);
           });
 
         console.log("Person successfully updated");
@@ -156,8 +156,8 @@ const App = () => {
       }
     } else {
       /*
-      When new name is entered
-    */
+        When new name is entered
+      */
       let newPerson = {
         name: newName,
         number: newNumber,
@@ -174,13 +174,21 @@ const App = () => {
           clearInputFields();
         })
         .catch((error) => {
-          console.log(
-            `Error occurred while adding ${newPerson.name}`,
-            error.message
-          );
-
           setError(true);
-          setMessage(`Information of ${newName} already exists in the server`);
+
+          if (error.response.data.error.includes("validation")) {
+            console.log(error.response.data.error);
+            setMessage(error.response.data.error);
+          } else {
+            console.log(
+              `Error occurred while adding ${newPerson.name}`,
+              error.message
+            );
+            setMessage(
+              `Information of ${newName} already exists in the server`
+            );
+          }
+
           setInterval(() => {
             setError(false);
             setMessage(null);

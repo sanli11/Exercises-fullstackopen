@@ -163,13 +163,20 @@ app.delete("/api/persons/:id", (req, res, next) => {
 });
 
 app.put("/api/persons/:id", (req, res, next) => {
-  const id = req.params.id;
+  const id = { _id: req.params.id };
   const { name, number } = req.body;
 
-  Person.findByIdAndUpdate(
+  Person.schema.path("name").validate(function (value) {
+    return value.length >= 3;
+  }, "Name should contain at least 3 characters");
+
+  Person.findOneAndUpdate(
     id,
     { name, number },
-    { new: true, runValidators: true, context: "query" }
+    {
+      new: true,
+      runValidators: true,
+    }
   )
     .then((updatedPerson) => res.json(updatedPerson))
     .catch((error) => next(error));
