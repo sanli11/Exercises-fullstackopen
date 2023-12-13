@@ -146,6 +146,8 @@ app.post("/api/persons", (req, res, next) => {
     number: personInfo.number,
   });
 
+  person.validateSync();
+
   person
     .save()
     .then((savedPerson) => res.json(savedPerson))
@@ -169,6 +171,14 @@ app.put("/api/persons/:id", (req, res, next) => {
   Person.schema.path("name").validate(function (value) {
     return value.length >= 3;
   }, "Name should contain at least 3 characters");
+
+  Person.schema.path("number").validate(function (value) {
+    return value.length >= 8;
+  }, "Number should be at least 8 characters long");
+  Person.schema.path("number").validate(function (value) {
+    let regex = /^\d{2,3}-\d{5,}$/;
+    return regex.test(value);
+  }, "Number should be in the format 123-4567890");
 
   Person.findOneAndUpdate(
     id,

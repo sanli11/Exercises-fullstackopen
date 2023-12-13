@@ -35,3 +35,72 @@ Content-Type: application/json
   "name": "Liisa Marttinen",
   "number": "040-243563"
 }
+
+###
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Le",
+  "number": "040-243563"
+}
+
+###
+
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Leon Kennedy",
+  "number": "0402"
+}
+
+###
+
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Leon Kennedy",
+  "number": "0402495137"
+}
+
+###
+
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Leon Kennedy",
+  "number": "0-40-2495137"
+}
+
+###
+
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Leon Kennedy",
+  "number": "0-4012495137"
+}
+
+###
+
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Leon Kennedy",
+  "number": "04-02495137"
+}
+
+###
+
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Leon Rogers",
+  "number": "040-22334455"
+}
