@@ -1,5 +1,6 @@
 const config = require("./utils/config");
 const logger = require("./utils/logger");
+const blogRouter = require("./controllers/blogs");
 
 const express = require("express");
 const app = express();
@@ -8,20 +9,8 @@ app.use(express.json());
 const cors = require("cors");
 app.use(cors());
 
-const Blog = require("./models/blog");
+app.use("/api/blogs", blogRouter);
 
-app.get("/api/blogs", (request, response) => {
-  Blog.find({}).then((blogs) => {
-    response.json(blogs);
-  });
-});
-
-app.post("/api/blogs", (request, response) => {
-  const blog = new Blog(request.body);
-
-  blog.save().then((result) => {
-    response.status(201).json(result);
-  });
-});
-
-app.listen(config.PORT, () => logger.info(`Server running on port ${config.PORT}`));
+app.listen(config.PORT, () =>
+  logger.info(`Server running on port ${config.PORT}`)
+);
