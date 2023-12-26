@@ -15,4 +15,14 @@ const favoriteBlog = (blogs) =>{
   return mostLikedBlog;
 };
 
-module.exports = { dummy, totalLikes, favoriteBlog };
+const mostBlogs = (blogs) => {
+  const lodash = require("lodash");
+
+  const authorsObj = lodash.countBy(blogs, "author");
+  const authorsArr = lodash.map(authorsObj, (b, n) => ({ author: n, blogs: b }));
+  const mostBlogs = lodash.maxBy(authorsArr, "blogs");
+
+  return mostBlogs;
+};
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };
