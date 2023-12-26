@@ -179,4 +179,12 @@ describe("using lodash", () => {
       blogs: 3
     });
   });
+
+  test("author with most likes", () => {
+    const result = listHelper.mostLikes(bloglist);
+    expect(result).toEqual({
+      author: "Edsger W. Dijkstra",
+      likes: 17
+    });
+  });
 });
