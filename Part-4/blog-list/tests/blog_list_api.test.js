@@ -96,4 +96,17 @@ test("missing title and url properties will be get a 400-Bad Request message", a
   await api.post("/api/blogs").send(missingUrl).expect(400);
 });
 
+test("deleting a blog using its id", async () => {
+  const blogsBeforeDeleting = await helper.blogsStored();
+  const blogToDelete = blogsBeforeDeleting[0];
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+  const blogsAfterDeleting = await helper.blogsStored();
+  expect(blogsAfterDeleting).toHaveLength(blogsBeforeDeleting.length - 1);
+
+  const contents = blogsAfterDeleting.map((b) => b.title);
+  expect(contents).not.toContain(blogToDelete.title);
+});
+
 afterAll(async () => mongoose.connection.close());

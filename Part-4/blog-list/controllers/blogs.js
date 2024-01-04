@@ -17,11 +17,18 @@ router.post("/", async (request, response) => {
     title,
     author,
     url,
-    likes: likes ? likes : 0,
+    likes: likes || 0,
   });
 
   const result = await blog.save();
   response.status(201).json(result);
+});
+
+router.delete("/:id", async (request, response) => {
+  const { id } = request.params;
+
+  await Blog.findByIdAndRemove(id);
+  response.status(204).end();
 });
 
 module.exports = router;
