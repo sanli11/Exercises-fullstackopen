@@ -23,9 +23,12 @@
     "cross-env": "^7.0.3",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "express-async-error": "^0.0.2",
     "express-async-errors": "^3.1.1",
+    "express-async-handler": "^1.2.0",
     "lodash": "^4.17.21",
-    "mongoose": "^7.6.5"
+    "mongoose": "^7.6.5",
+    "mongoose-unique-validator": "^4.0.0"
   },
   "jest": {
     "testEnvironment": "node",

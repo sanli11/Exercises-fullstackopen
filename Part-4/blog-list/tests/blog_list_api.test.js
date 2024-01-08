@@ -7,13 +7,13 @@ const helper = require("./api_test_helper");
 const Blog = require("../models/blog");
 
 beforeEach(async () => {
-  await Blog.deleteMany({});
+	await Blog.deleteMany({});
 
-  for (let blog of helper.initialBlogs) {
-    let blogObject = new Blog(blog);
-    await blogObject.save();
-  }
-});
+	for (const blog of helper.initialBlogs) {
+		const blogObject = new Blog(blog);
+		await blogObject.save();
+	}
+}, 10000);
 
 describe("checking GET method for API", () => {
   test("api returns correct number of blog posts in JSON format", async () => {

@@ -1,4 +1,4 @@
-/* eslint-disable indent */
+const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 
 const router = require("express").Router();
@@ -11,21 +11,36 @@ router.get("/", async (req, res) => {
 	res.json(users);
 });
 
-router.post("/", async (req, res) => {
-	const { username, name, password } = req.body;
+router.post(
+	"/",
+	asyncHandler(async (req, res) => {
+		const { username, name, password } = req.body;
 
-	const saltRounds = 10;
-	const passwordHash = await bcrypt.hash(password, saltRounds);
+		if (!password || password.length < 3) {
+			return res
+				.status(400)
+				.send({ error: "Password must be at least 3 characters long" });
+		}
 
-	const newUser = new User({
-		username,
-		name,
-		passwordHash,
-	});
+		if (!username || username.length < 3) {
+			return res
+				.status(400)
+				.send({ error: "Username must be at least 3 characters long" });
+		}
 
-	const savedUser = await newUser.save();
+		const saltRounds = 10;
+		const passwordHash = await bcrypt.hash(password, saltRounds);
 
-	res.status(201).json(savedUser);
-});
+		const newUser = new User({
+			username,
+			name,
+			passwordHash,
+		});
+
+		const savedUser = await newUser.save();
+
+		res.status(201).json(savedUser);
+	}),
+);
 
 module.exports = router;
