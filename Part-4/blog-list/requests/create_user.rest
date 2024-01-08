@@ -6,3 +6,35 @@ Content-Type: application/json
     "name": "First User",
     "password": "user1password"
 }
+
+###
+
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "ab",
+    "name": "User FullName",
+    "password": "password"
+}
+
+###
+
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "username",
+    "name": "User FullName",
+    "password": "ab"
+}
+
+###
+
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "name": "User FullName",
+    "password": "password"
+}

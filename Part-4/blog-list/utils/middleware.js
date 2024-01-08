@@ -18,12 +18,12 @@ const errorHandler = (error, request, response, next) => {
   logger.error(error.message);
 
   switch (error.name) {
-    case "CastError":
-      return response.status(400).send({ error: "Mal-formatted ID" });
+			case "CastError":
+				return response.status(400).send({ error: "Mal-formatted ID" });
 
-    case "ValidationError":
-      return response.status(400).send({ error: error.message });
-  }
+			case "ValidationError":
+				return response.status(400).send({ error: "Username must be unique" });
+		}
 
   next(error);
 };
