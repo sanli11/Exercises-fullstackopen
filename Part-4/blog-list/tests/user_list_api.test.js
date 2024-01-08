@@ -30,11 +30,13 @@ describe("Username should be more than 3 characters and unique", () => {
 			password: "password3",
 		};
 
-		await api
-			.post("/api/users")
-			.send(newUser)
-			.expect(400)
-			.expect("Content-Type", /application\/json/);
+		await api.post("/api/users").send(newUser).expect(400);
+
+		const storedUsers = helper.usersStored();
+		const contents = storedUsers.body.map((user) => user.username);
+
+		expect(storedUsers.body).toHaveLength(helper.initialUsers.length);
+		expect(contents).not.toContain(newUser.username);
 	});
 
 	test("Username should be unique", async () => {
@@ -44,11 +46,13 @@ describe("Username should be more than 3 characters and unique", () => {
 			password: "password3",
 		};
 
-		await api
-			.post("/api/users")
-			.send(newUser)
-			.expect(400)
-			.expect("Content-Type", /application\/json/);
+		await api.post("/api/users").send(newUser).expect(400);
+
+		const storedUsers = helper.usersStored();
+		const contents = storedUsers.body.map((user) => user.username);
+
+		expect(storedUsers.body).toHaveLength(helper.initialUsers.length);
+		expect(contents).not.toContain(newUser.username);
 	});
 });
 
@@ -60,11 +64,13 @@ describe("Password should be more than 3 characters", () => {
 			password: "pa",
 		};
 
-		await api
-			.post("/api/users")
-			.send(newUser)
-			.expect(400)
-			.expect("Content-Type", /application\/json/);
+		await api.post("/api/users").send(newUser).expect(400);
+
+		const storedUsers = helper.usersStored();
+		const contents = storedUsers.body.map((user) => user.username);
+
+		expect(storedUsers.body).toHaveLength(helper.initialUsers.length);
+		expect(contents).not.toContain(newUser.username);
 	});
 });
 

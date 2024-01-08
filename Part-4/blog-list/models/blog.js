@@ -11,7 +11,9 @@ blogSchema.set("toJSON", {
 	transform: (doc, obj) => {
 		obj.id = obj._id.toString();
 
+		// biome-ignore lint/performance/noDelete: property deletion is necessary after fetching the object
 		delete obj._id;
+		// biome-ignore lint/performance/noDelete: property deletion is necessary after fetching the object
 		delete obj.__v;
 	},
 });

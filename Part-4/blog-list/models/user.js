@@ -18,8 +18,11 @@ userSchema.set("toJSON", {
 	transform: (document, returnedObject) => {
 		returnedObject.id = returnedObject._id.toString();
 
+		// biome-ignore lint/performance/noDelete: property deletion is necessary after fetching the object
 		delete returnedObject._id;
+		// biome-ignore lint/performance/noDelete: property deletion is necessary after fetching the object
 		delete returnedObject.__v;
+		// biome-ignore lint/performance/noDelete: property deletion is necessary after fetching the object
 		delete returnedObject.passwordHash;
 	},
 });
