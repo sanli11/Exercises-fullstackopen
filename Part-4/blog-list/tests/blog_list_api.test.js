@@ -26,16 +26,16 @@ describe("checking GET method for API", () => {
   });
 
   test("unique identifier property of the blog posts is named id", async () => {
-    const ids = [];
-    const blogs = await api.get("/api/blogs");
+			const blogs = await api.get("/api/blogs");
+			const ids = [];
 
-    blogs.body.forEach((blog) => {
-      expect(blog.id).toBeDefined();
-      expect(ids).not.toContain(blog.id);
+			for (const blog of blogs.body) {
+				expect(blog.id).toBeDefined();
+				expect(ids).not.toContain(blog.id);
 
-      ids.push(blog.id);
-    });
-  });
+				ids.push(blog.id);
+			}
+		});
 });
 
 describe("checking POST method for API", () => {
