@@ -5,7 +5,60 @@ Content-Type: application/json
   "title": "Test Blog",
   "author": "Test Author",
   "url": "http://test.com",
+  "userId": "659b27489588a4a4906dbd80",
   "likes": 0
+}
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "First Blog",
+  "author": "First Author",
+  "url": "http://first.com",
+  "userId": "659b27489588a4a4906dbd80",
+  "likes": 9
+}
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Second Blog",
+  "author": "Second Author",
+  "url": "http://second.com",
+  "userId": "659dc1e2380d5b2a5fb6c640",
+  "likes": 4
+}
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Third Blog",
+  "author": "Third Author",
+  "url": "http://third.com",
+  "userId": "659dc1e2380d5b2a5fb6c640",
+  "likes": 11
+}
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Fourth Blog",
+  "author": "Fourth Author",
+  "url": "http://fourth.com",
+  "userId": "659dc1e4380d5b2a5fb6c644",
+  "likes": 2
 }
 
 ###

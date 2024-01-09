@@ -13,6 +13,28 @@ POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
+    "username": "Second-User",
+    "name": "Second User",
+    "password": "user2password"
+}
+
+###
+
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "Third-User",
+    "name": "Third User",
+    "password": "user3password"
+}
+
+###
+
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
     "username": "ab",
     "name": "User FullName",
     "password": "password"
