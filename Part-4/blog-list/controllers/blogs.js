@@ -1,9 +1,20 @@
 const router = require("express").Router();
 
 const asyncHandler = require("express-async-handler");
+const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
 const Blog = require("../models/blog");
+
+const getTokenFrom = (req) => {
+	const authorization = req.get("authorization");
+
+	if (authorization?.startsWith("Bearer ")) {
+		return authorization.replace("Bearer ", "");
+	}
+
+	return null;
+};
 
 router.get(
 	"/",
@@ -28,7 +39,14 @@ router.post(
 	asyncHandler(async (request, response) => {
 		const { title, author, url, likes } = request.body;
 
-		const user = await User.findById(request.body.userId);
+		// eslint-disable-next-line no-undef
+		const decodedToken =jwt.verify(getTokenFrom(request), process.env.SECRET);
+
+		if (!decodedToken.id) {
+			return response.status(401).json({ error: "token invalid" });
+		}
+
+		const user = await User.findById(decodedToken.id);
 
 		if (!title || !url) {
 			return response.status(400).end();

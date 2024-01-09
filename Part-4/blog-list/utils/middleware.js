@@ -25,7 +25,7 @@ const errorHandler = (error, request, response, next) => {
 				return response.status(400).send({ error: "Username must be unique" });
 
       case "JsonWebTokenError":
-        return response.status(401).json({ error: "invalid token" });
+        return response.status(401).json({ error: error.message });
 		}
 
   next(error);
