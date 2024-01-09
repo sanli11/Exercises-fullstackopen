@@ -6,16 +6,6 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const Blog = require("../models/blog");
 
-const getTokenFrom = (req) => {
-	const authorization = req.get("authorization");
-
-	if (authorization?.startsWith("Bearer ")) {
-		return authorization.replace("Bearer ", "");
-	}
-
-	return null;
-};
-
 router.get(
 	"/",
 	asyncHandler(async (req, res) => {
@@ -40,7 +30,7 @@ router.post(
 		const { title, author, url, likes } = request.body;
 
 		// eslint-disable-next-line no-undef
-		const decodedToken =jwt.verify(getTokenFrom(request), process.env.SECRET);
+		const decodedToken =jwt.verify(request.token, process.env.SECRET);
 
 		if (!decodedToken.id) {
 			return response.status(401).json({ error: "token invalid" });

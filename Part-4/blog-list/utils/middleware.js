@@ -1,6 +1,18 @@
 /* eslint-disable indent */
 const logger = require("./logger");
 
+const tokenExtractor = (request, response, next) => {
+	const authorization = request.get("authorization");
+
+	if (authorization?.startsWith("Bearer ")) {
+		request.token = authorization.replace("Bearer ", "");
+	} else {
+    request.token = null;
+  }
+
+  next();
+};
+
 const requestLogger = (request, response, next) => {
   logger.info(
     `Method: ${request.method} - Path: ${request.path} - Body: ${request.body}`
@@ -31,4 +43,4 @@ const errorHandler = (error, request, response, next) => {
   next(error);
 };
 
-module.exports = { requestLogger, unknownEndpoint, errorHandler };
+module.exports = { tokenExtractor, requestLogger, unknownEndpoint, errorHandler };
