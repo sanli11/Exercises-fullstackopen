@@ -2,6 +2,7 @@ const config = require("./utils/config");
 const logger = require("./utils/logger");
 const middleWare = require("./utils/middleware");
 
+const loginRouter = require("./controllers/login");
 const userRouter = require("./controllers/users");
 const blogRouter = require("./controllers/blogs");
 
@@ -26,6 +27,7 @@ mongoose
 
 app.use(middleWare.requestLogger);
 
+app.use("/api/login", loginRouter);
 app.use("/api/users", userRouter);
 app.use("/api/blogs", blogRouter);
 
