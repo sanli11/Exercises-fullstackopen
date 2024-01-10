@@ -4,6 +4,8 @@ const asyncHandler = require("express-async-handler");
 
 const middleWare = require("../utils/middleware");
 
+const middleWare = require("../utils/middleware");
+
 const Blog = require("../models/blog");
 
 router.get(
@@ -26,6 +28,7 @@ router.get(
 
 router.post(
 	"/",
+	middleWare.userExtractor,
 	middleWare.userExtractor,
 	asyncHandler(async (request, response) => {
 		const { title, author, url, likes } = request.body;
@@ -54,6 +57,7 @@ router.post(
 
 router.delete(
 	"/:id",
+	middleWare.userExtractor,
 	middleWare.userExtractor,
 	asyncHandler(async (request, response) => {
 		const blogId = request.params.id;
