@@ -15,3 +15,13 @@ Content-Type: application/json
     "username": "First-User",
     "password": "user1password"
 }
+
+###
+
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+    "username": "Second-User",
+    "password": "user2password"
+}
