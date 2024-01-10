@@ -1,9 +1,9 @@
 const router = require("express").Router();
 
 const asyncHandler = require("express-async-handler");
-const jwt = require("jsonwebtoken");
 
-const User = require("../models/user");
+const middleWare = require("../utils/middleware");
+
 const Blog = require("../models/blog");
 
 router.get(
@@ -26,17 +26,10 @@ router.get(
 
 router.post(
 	"/",
+	middleWare.userExtractor,
 	asyncHandler(async (request, response) => {
 		const { title, author, url, likes } = request.body;
-
-		// eslint-disable-next-line no-undef
-		const decodedToken =jwt.verify(request.token, process.env.SECRET);
-
-		if (!decodedToken.id) {
-			return response.status(401).json({ error: "token invalid" });
-		}
-
-		const user = await User.findById(decodedToken.id);
+		const user = request.user;
 
 		if (!title || !url) {
 			return response.status(400).end();
@@ -61,17 +54,10 @@ router.post(
 
 router.delete(
 	"/:id",
+	middleWare.userExtractor,
 	asyncHandler(async (request, response) => {
 		const blogId = request.params.id;
-
-		// eslint-disable-next-line no-undef
-		const decodedToken = jwt.verify(request.token, process.env.SECRET);
-
-		if (!decodedToken.id) {
-			return response.status(401).json({ error: "token missing or invalid" });
-		}
-
-		const user = await User.findById(decodedToken.id);
+		const user = request.user;
 		const blog = await Blog.findById(blogId);
 
 		if (!user) {
