@@ -73,3 +73,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkZpc
   "url": "http://github.com",
   "likes": 12
 }
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlNlY29uZC1Vc2VyIiwiaWQiOiI2NTlkYzFlMjM4MGQ1YjJhNWZiNmM2NDAiLCJpYXQiOjE3MDQ4NDc2NDN9.DAcj5OtwJ7tkRGdJWazdLPVH-U5cWjVANMxU8-4UdOk
+
+{
+  "title": "Testing For Second User",
+  "author": "Test Author 2",
+  "url": "http://github.com",
+  "likes": 11
+}
