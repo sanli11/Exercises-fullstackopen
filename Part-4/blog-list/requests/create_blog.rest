@@ -68,7 +68,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkZpcnN0LVVzZXIiLCJpZCI6IjY1OWIyNzQ4OTU4OGE0YTQ5MDZkYmQ4MCIsImlhdCI6MTcwNDg0MDI2MX0.SGZMcdsmkE_e227gl3WWt1YuIpxmrwX_pVF5PlddrAI
 
 {
-  "title": "Testing Authorization 2",
+  "title": "Testing Authorization",
   "author": "Test Author",
   "url": "http://github.com",
   "likes": 12
