@@ -27,7 +27,6 @@ router.get(
 router.post(
 	"/",
 	middleWare.userExtractor,
-	middleWare.userExtractor,
 	asyncHandler(async (request, response) => {
 		const { title, author, url, likes } = request.body;
 		const user = request.user;
@@ -55,7 +54,6 @@ router.post(
 
 router.delete(
 	"/:id",
-	middleWare.userExtractor,
 	middleWare.userExtractor,
 	asyncHandler(async (request, response) => {
 		const blogId = request.params.id;
